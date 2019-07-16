@@ -1,0 +1,62 @@
+extends layout
+
+block content
+    script(type='text/javascript').
+
+    #container.wrapper
+      // (s) contents
+      .toast-wrap
+        .keypad &#xD0A4;&#xD328;&#xB4DC;
+      .contents
+        .inner-box
+          header.header
+            h1.logo
+              a(href='http://kr.plaync.com')
+                span plaync
+          section.login-wrap
+            form#loginForm.account-form(name='loginForm', method='post', action='/join', novalidate='')
+              fieldset
+                legend plaync &#xB85C;&#xADF8;&#xC778;
+                .input-account-wrap
+                  .input-pwd(style="margin-bottom:10px")
+                    label(for='id') 아이디
+                    input#id(type='text', name='id', maxlength='64', autocomplete='off', autocapitalize='off', placeholder='아이디', tabindex='1', value='')
+                    span.btn-delete &#xC0AD;&#xC81C;
+                    span.msg
+                .input-pwd(style="margin-bottom:10px")
+                  label(for='password') 비밀번호
+                  input#password(type='password', name='password', maxlength='16', autocomplete='off', autocapitalize='off', placeholder='비밀번호', tabindex='2')
+                  span.btn-delete &#xC0AD;&#xC81C;
+                  span.msg
+                .input-pwd(style="margin-bottom:10px")
+                  label(for='name') 이름
+                  input#name(type='text', name='name', maxlength='16', autocomplete='off', autocapitalize='off', placeholder='이름', tabindex='3')
+                  span.btn-delete &#xC0AD;&#xC81C;
+                  span.msg
+
+                - var msg = "#{message}"
+                #msg(style="text-align:center;color:#ff0000") 
+                  if msg
+                    | #{message}
+                br
+
+                .btn-wrap(style="margin-top:30px;")
+                  button#btnPlayncLogin.btn-login(style="background-color: #7f9feb;")
+                    span 회원가입
+                .btn-wrap
+                  button.btn-login(type="button" onclick="location.href='/login'")
+                    span 로그인 창으로 돌아가기
+            .login-3rd-party
+              p
+                button#gLogin.google-login-btn(title='Google')
+                  span Google
+        #modal-ajax.modalPopup
+          .modalCon
+            // modal content
+            .message &#xD398;&#xC774;&#xC2A4;&#xBD81; &#xB85C;&#xADF8;&#xC778;&#xC744; &#xC704;&#xD574; &#xCE5C;&#xAD6C; &#xB9AC;&#xC2A4;&#xD2B8; &#xBC0F; &#xC774;&#xBA54;&#xC77C; &#xC815;&#xBCF4;&#xC5D0; &#xB300;&#xD55C; &#xB3D9;&#xC758;&#xAC00; &#xD544;&#xC694;&#xD569;&#xB2C8;&#xB2E4;.
+            .button
+              span#btnModalOk.btn &#xD655;&#xC778;
+            // // modal content
+
+      .footer
+        p Copyright &copy; NCSOFT Corporation. All Rights Reserved.

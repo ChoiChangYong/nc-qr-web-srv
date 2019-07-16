@@ -1,0 +1,84 @@
+extends layout
+
+block content
+    script(src="https://172.19.148.83:3000/socket.io/socket.io.js")
+    script(src='/javascripts/qrcode.js')
+    
+    script(type='text/javascript').
+      var setCookie = function(name, value, exp) {
+        var date = new Date();
+        date.setTime(date.getTime() + exp*60*1000);
+        document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+      };
+
+      var socket = io('https://172.19.148.83:3000');
+      //- var qrSocket = io('https://172.19.148.83:3000/qrcode');
+      socket.emit('msg', { hello: 'server' });
+      socket.on('recMsg', function (data) {
+        console.log(data); 
+      });
+      //- socket.on('qrcode', function (data) {
+      //-   console.log(data);
+      //- });
+      
+      window.onload = function () {
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+          width : 250,
+          height : 250,
+          correctLevel : QRCode.CorrectLevel.H
+        });
+        qrcode.makeCode("#{qrcode}");
+        $("#qrcode > img").css({"margin":"auto"});
+        //- setCookie('qr_token', "#{qrcode}", 1); // 1분 후 만료
+        setInterval(timer, 1000);
+      };
+
+      var countDown = 15;
+      function timer()
+      {
+          if (countDown <= 0){
+            $("#qrcode").remove();
+            $("#qrcodeMessage").remove();
+            $('#qrcodeSession').html("QR코드가 만료되었습니다.<br />현재 페이지를 새로고침하여 새로 발급받아주세요!");
+          }
+          else{
+            $('#qrcodeSession').text(countDown);
+          }
+          countDown--;
+      }
+
+    #container.wrapper
+      // (s) contents
+      .toast-wrap
+        .keypad &#xD0A4;&#xD328;&#xB4DC;
+      .contents
+        .inner-box
+          header.header(style="padding-bottom:40dp;")
+            h1.logo
+              a(href='http://kr.plaync.com')
+                span plaync
+          section.login-wrap(style="text-align:center")
+            form#loginForm.account-form(name='loginForm', method='get', action='/', novalidate='')
+                #qrcode(style="margin:40px;")
+                .input
+                  span#qrcodeSession
+                span#qrcodeMessage 인증완료 후, 확인 버튼을 눌러주세요! 
+                br
+                br
+                br
+                .btn-wrap
+                  button.btn-login(type="button" onclick="location.href='/qr-login'" style="background-color: #7f9feb;")
+                    span 확인
+                .btn-wrap
+                  button.btn-login(type="button" onclick="location.href='/login'")
+                    span 로그인 창으로 돌아가기
+        #modal-ajax.modalPopup
+          .modalCon
+            // modal content
+            .message &#xD398;&#xC774;&#xC2A4;&#xBD81; &#xB85C;&#xADF8;&#xC778;&#xC744; &#xC704;&#xD574; &#xCE5C;&#xAD6C; &#xB9AC;&#xC2A4;&#xD2B8; &#xBC0F; &#xC774;&#xBA54;&#xC77C; &#xC815;&#xBCF4;&#xC5D0; &#xB300;&#xD55C; &#xB3D9;&#xC758;&#xAC00; &#xD544;&#xC694;&#xD569;&#xB2C8;&#xB2E4;.
+            .button
+              span#btnModalOk.btn &#xD655;&#xC778;
+            // // modal content
+
+      .footer
+        p Copyright &copy; NCSOFT Corporation. All Rights Reserved.
