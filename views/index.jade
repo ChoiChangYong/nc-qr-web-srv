@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  p #{name}님 환영합니다.
+  p #{name}님의 아이디는 #{id}입니다.
+  form(name='logoutForm', method='post', action='/logout')
+    input(type="submit" value="로그아웃")
