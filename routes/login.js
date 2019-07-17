@@ -66,19 +66,6 @@ router.post('/', function(req, res, next) {
 
 /* GET QR-Code login page */
 router.get('/qrcode', function(req, res, next) {
-  // const qr_token = {
-  //   qr_token: req.cookies.qr_token
-  // };
-  // if(qr_token.qr_token){
-  //   console.log("/qrcode (GET)  : is qrcode token");
-
-  //   // QR코드 검증 API 호출
-
-  //   res.render('login_qrcode', { 
-  //     title: 'QR-Code Login',
-  //     massage: "QR코드 토큰 쿠키 있음"
-  //   });
-  // } else {
     console.log("/qrcode (GET) : create qrcode");
 
     request.get({
@@ -107,6 +94,5 @@ router.get('/qrcode', function(req, res, next) {
     });
   // }
 });
-
 
 module.exports = router;

@@ -33,10 +33,23 @@ io.on('connection', function (socket) {
     console.log(data);
     socket.emit('recMsg', {comment: instanceId});
   });
-  // io.to(instanceId).emit('qrcode', {
-  // });
+  
 });
 
+/* POST qrcode-auth (Auth Server -> this) */
+app.post('/qrcode-auth', function(req, res, next) {
+  var token = {
+    user_token: req.body.user_toke
+  }
+  io.to(instanceId).emit('auth', {
+    user_token: token.user_token
+  });
+
+  res.json({
+    result: 0,
+    massage: ''
+  });
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

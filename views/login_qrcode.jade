@@ -17,9 +17,9 @@ block content
       socket.on('recMsg', function (data) {
         console.log(data); 
       });
-      //- socket.on('qrcode', function (data) {
-      //-   console.log(data);
-      //- });
+      socket.on('auth', function (data) {
+        console.log(data);
+      });
       
       window.onload = function () {
         var qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -33,7 +33,7 @@ block content
         setInterval(timer, 1000);
       };
 
-      var countDown = 15;
+      var countDown = 30;
       function timer()
       {
           if (countDown <= 0){
