@@ -50,7 +50,7 @@ router.post('/', function(req, res, next) {
 
     if(body.result==1){
       res.cookie("accessToken", body.user_token, {
-        maxAge: 60000,   // 60000밀리초 -> 60초 (1분)
+        maxAge: 60*60*1000,   // 1시간
         httpOnly: true,
         // secure: true
       });

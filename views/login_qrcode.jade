@@ -12,13 +12,14 @@ block content
       };
 
       var socket = io('https://172.19.148.83:3000');
-      //- var qrSocket = io('https://172.19.148.83:3000/qrcode');
+
       socket.emit('msg', { hello: 'server' });
       socket.on('recMsg', function (data) {
-        console.log(data); 
+        console.log(data);
       });
       socket.on('auth', function (data) {
-        console.log(data);
+        setCookie('accessToken', data.user_token, 60); // 1시간 후 만료
+        window.location.href = '/';
       });
       
       window.onload = function () {
@@ -29,7 +30,7 @@ block content
         });
         qrcode.makeCode("#{qrcode}");
         $("#qrcode > img").css({"margin":"auto"});
-        //- setCookie('qr_token', "#{qrcode}", 1); // 1분 후 만료
+        
         setInterval(timer, 1000);
       };
 

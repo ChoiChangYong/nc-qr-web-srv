@@ -25,30 +25,15 @@ socket_server.listen(3000, function() {
 });
 
 var instanceId;
-io.on('connection', function (socket) {
+var qrSocket = io.on('connection', function (socket) {
   console.log('socket connect');
 
   instanceId = socket.id;
   socket.on('msg', function (data) {
     console.log(data);
-    socket.emit('recMsg', {comment: instanceId});
+    socket.emit('recMsg', {instanceId: instanceId});
   });
   
-});
-
-/* POST qrcode-auth (Auth Server -> this) */
-app.post('/qrcode-auth', function(req, res, next) {
-  var token = {
-    user_token: req.body.user_toke
-  }
-  io.to(instanceId).emit('auth', {
-    user_token: token.user_token
-  });
-
-  res.json({
-    result: 0,
-    massage: ''
-  });
 });
 
 // view engine setup
@@ -60,6 +45,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+/* POST qrcode-auth (Auth Server -> this) */
+app.post('/qrcode-auth', function(req, res, next) {
+  var token = {
+    user_token: req.body.user_token
+  };
+  
+  qrSocket.to(instanceId).emit('auth', {
+    user_token: token.user_token
+  });
+  
+  res.json({result: 1});
+});
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
