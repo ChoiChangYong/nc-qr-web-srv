@@ -6,7 +6,7 @@ const request = require('request')
 /* POST logout */
 router.post('/logout', function(req, res, next) {
   res.clearCookie('accessToken');
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 /* GET main page */
@@ -27,11 +27,8 @@ router.get('/', function(req, res, next) {
       console.log(body);
       console.log("==============================");
 
-      if(body.result==0) {
-        res.redirect('/login');
-      } else if(body.result==1){
+      if(body.result==1){
         res.render('index', {
-          title: "PlayNC",
           id: body.id,
           name: body.name 
         });
@@ -41,7 +38,7 @@ router.get('/', function(req, res, next) {
     });
   } else {
     console.log("/ (GET) : is not user token, login redirect");
-    res.redirect('/login');  
+    res.render('index'); 
   }
 });
 

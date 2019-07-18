@@ -56,20 +56,21 @@ block content
         .inner-box
           header.header(style="padding-bottom:40dp;")
             h1.logo
-              a(href='http://kr.plaync.com')
+              a(href='/')
                 span plaync
           section.login-wrap(style="text-align:center")
             form#loginForm.account-form(name='loginForm', method='get', action='/', novalidate='')
-                #qrcode(style="margin:40px;")
+                #qrdiv(style="min-height:250px;margin:40px")
+                  #qrcode(style="margin:auto")
                 .input
                   span#qrcodeSession
-                span#qrcodeMessage 인증완료 후, 확인 버튼을 눌러주세요! 
+                span#qrcodeMessage 인증이 완료되면 자동으로 로그인됩니다!
                 br
                 br
                 br
-                .btn-wrap
-                  button.btn-login(type="button" onclick="location.href='/qr-login'" style="background-color: #7f9feb;")
-                    span 확인
+                //- .btn-wrap
+                //-   button.btn-login(type="button" onclick="location.href='/qr-login'" style="background-color: #7f9feb;")
+                //-     span 확인
                 .btn-wrap
                   button.btn-login(type="button" onclick="location.href='/login'")
                     span 로그인 창으로 돌아가기
