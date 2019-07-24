@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
     
     request.post({
       headers: {'content-type': 'application/json'},
-      url: 'http://172.19.148.51:3000/user-token/validation',
+      url: 'http://172.19.144.61:3000/user-token/validation',
       body: user_token,
       json: true
     }, function(error, response, body){
@@ -40,7 +40,7 @@ router.post('/', function(req, res, next) {
   console.log(user);
   request.post({
     headers: {'content-type': 'application/json'},
-    url: 'http://172.19.148.51:3000/login',
+    url: 'http://172.19.144.61:3000/login',
     body: user,
     json: true
   }, function(error, response, body){
@@ -70,7 +70,7 @@ router.get('/qrcode', function(req, res, next) {
 
     request.get({
       headers: {'content-type': 'application/json'},
-      url: 'http://172.19.148.51:3000/qrcode',
+      url: 'http://172.19.144.61:3000/qrcode',
       json: true
     }, function(error, response, body){
       console.log("=============body=============");

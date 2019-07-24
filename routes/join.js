@@ -19,7 +19,7 @@ router.post('/', function (req, res, next) {
 
     request.post({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.148.51:3000/join',
+        url: 'http://172.19.144.61:3000/join',
         body: user,
         json: true
     }, function(error, response, body){

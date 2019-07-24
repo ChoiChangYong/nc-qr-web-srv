@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
     console.log("/ (GET) : is user token");
     request.post({
       headers: {'content-type': 'application/json'},
-      url: 'http://172.19.148.51:3000/user-token/validation',
+      url: 'http://172.19.144.61:3000/user-token/validation',
       body: user_token,
       json: true
     }, function(error, response, body){
