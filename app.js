@@ -3,12 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var request = require('request');
-var qrcode = require('qrcode');
 
-var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var joinRouter = require('./routes/join');
+var mainRouter = require('./routes/main');
 
 var app = express();
 
@@ -59,9 +57,9 @@ app.post('/qrcode-auth', function(req, res, next) {
   res.json({result: 1});
 });
 
-app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/join', joinRouter);
+app.use('/', mainRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
