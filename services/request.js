@@ -6,7 +6,7 @@ var request = require('request');
 exports.requestUserTokenValidation = (user_token, callback) => {
     request.post({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.144.61:3000/user-token/validation',
+        url: 'http://172.19.148.51:3000/user-token/validation',
         body: {user_token},
         json: true
       }, function(error, response, body){
@@ -25,7 +25,7 @@ exports.requestUserTokenValidation = (user_token, callback) => {
 exports.requestUserInfoVerification = (user, callback) => {
     request.post({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.144.61:3000/login',
+        url: 'http://172.19.148.51:3000/login',
         body: user,
         json: true
     }, function(error, response, body){
@@ -47,12 +47,11 @@ exports.requestUserInfoVerification = (user, callback) => {
 exports.requestQrcodeCreate = (callback) => {
     request.get({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.144.61:3000/qrcode',
+        url: 'http://172.19.148.51:3000/qrcode',
         json: true
     }, function(error, response, body){
         console.log("=============body=============");
         console.log(body);
-        console.log(body.qrcode);
         console.log("==============================");
   
         if(body.result==1){
@@ -69,14 +68,14 @@ exports.requestQrcodeCreate = (callback) => {
 exports.requestUserJoin = (user, callback) => {
     request.post({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.144.61:3000/join',
+        url: 'http://172.19.148.51:3000/join',
         body: user,
         json: true
     }, function(error, response, body){
         console.log(body);
         if(body.result==0)
-            callback(false);
+            callback({result:false, message:body.message});
         else
-            callback(true); 
+            callback({result:true, message:body.message});
     });
 };

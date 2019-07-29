@@ -17,12 +17,12 @@ exports.processJoin = (req, res, next) => {
         'name': req.body.name
     };
 
-    Request.requestQrcodeCreate(user, (callback) => {
-        if(callback){
+    Request.requestUserJoin(user, (callback) => {
+        if(callback.result){
             res.redirect('/login');
         } else {
             res.render('join', {
-                message: body.message
+                message: callback.message
             });
         }
     });

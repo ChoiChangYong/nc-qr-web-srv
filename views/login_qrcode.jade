@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    script(src="https://172.19.145.34:3000/socket.io/socket.io.js")
+    script(src="https://172.19.148.83:3000/socket.io/socket.io.js")
     script(src='/javascripts/qrcode.js')
     
     script(type='text/javascript').
@@ -11,7 +11,7 @@ block content
         document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
       };
 
-      var socket = io('https://172.19.145.34:3000');
+      var socket = io('https://172.19.148.83:3000');
 
       socket.emit('msg', { hello: 'server' });
       socket.on('recMsg', function (data) {
