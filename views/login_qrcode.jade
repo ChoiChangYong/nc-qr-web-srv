@@ -1,7 +1,8 @@
 extends layout
 
 block content
-    script(src="https://172.19.145.34:3000/socket.io/socket.io.js")
+    //- script(src="https://172.19.148.83:3002/socket.io/socket.io.js")
+    script(src="https://localhost:3002/socket.io/socket.io.js")
     script(src='/javascripts/qrcode.js')
     
     script(type='text/javascript').
@@ -11,26 +12,27 @@ block content
         document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
       };
 
-      var socket = io('https://172.19.145.34:3000');
+      //- var socket = io('https://172.19.148.83:3002');
+      var socket = io('https://localhost:3002');
 
-      socket.emit('msg', { hello: 'server' });
-      socket.on('recMsg', function (data) {
-        console.log(data);
-      });
-      socket.on('auth', function (data) {
-        setCookie('accessToken', data.user_token, 60); // 1시간 후 만료
-        window.location.href = '/';
-      });
-      
-      window.onload = function () {
+      socket.on('qrcode', function (data) {
+        console.log(data.qrcode);
+        console.log(data.instanceId);
         var qrcode = new QRCode(document.getElementById("qrcode"), {
           width : 250,
           height : 250,
           correctLevel : QRCode.CorrectLevel.H
         });
-        qrcode.makeCode("#{qrcode}");
+        qrcode.makeCode(data.qrcode);
         $("#qrcode > img").css({"margin":"auto"});
-        
+      });
+      socket.on('auth', function (data) {
+        console.log(data);
+        setCookie('user-session', data.userSessionID, 60); // 1시간 후 만료
+        window.location.href = '/';
+      });
+      
+      window.onload = function () {
         setInterval(timer, 1000);
       };
 

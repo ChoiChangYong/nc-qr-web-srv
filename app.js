@@ -10,6 +10,8 @@ var mainRouter = require('./routes/main');
 
 var app = express();
 
+var Request = require('./services').Request;
+
 const fs = require('fs');
 const options = {
 	key: fs.readFileSync('./keys/private.pem'),
@@ -18,8 +20,8 @@ const options = {
 
 var socket_server = require('https').createServer(options, app);
 var io = require('socket.io')(socket_server);
-socket_server.listen(3000, function() {
-  console.log("HTTPS socket_server listening on port " + 3000);
+socket_server.listen(3002, function() {
+  console.log("HTTPS socket_server listening on port " + 3002);
 });
 
 var instanceId;
@@ -27,11 +29,15 @@ var qrSocket = io.on('connection', function (socket) {
   console.log('socket connect');
 
   instanceId = socket.id;
-  socket.on('msg', function (data) {
-    console.log(data);
-    socket.emit('recMsg', {instanceId: instanceId});
-  });
   
+  Request.createQrcode(instanceId, (callback) => {
+    if(callback.result){
+      qrSocket.to(instanceId).emit('qrcode', {
+        qrcode: callback.qrcode,
+        instanceId: instanceId
+      });
+    }
+  });
 });
 
 // view engine setup
@@ -44,14 +50,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* GET QR-Code login page */
+app.get('/login/qrcode', function(req, res, next) {
+  res.render('login_qrcode');
+});
+
 /* POST qrcode-auth (Auth Server -> this) */
 app.post('/qrcode-auth', function(req, res, next) {
-  var token = {
-    user_token: req.body.user_token
+  var request = {
+    userSessionID: req.body.userSessionID,
+    instanceId: req.body.instanceId
   };
-  
-  qrSocket.to(instanceId).emit('auth', {
-    user_token: token.user_token
+  console.log('request.userSessionID : '+request.userSessionID);
+  console.log('request.instanceId : '+request.instanceId);
+
+  qrSocket.to(request.instanceId).emit('auth', {
+    userSessionID: request.userSessionID
   });
   
   res.json({result: 1});
