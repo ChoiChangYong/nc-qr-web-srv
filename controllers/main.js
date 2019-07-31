@@ -4,8 +4,14 @@ var Request = require('../services').Request;
  * 로그아웃 처리, 쿠키삭제
  */
 exports.logout = (req, res, next) => {
-    res.clearCookie('accessToken');
-    res.redirect('/login');
+    Request.deleteUserSession(req.cookies.sessionID, (callback) => {
+        if(callback.result){
+            res.clearCookie('user-session');
+            res.redirect('/');
+        } else {
+            console.log("로그아웃 실패!");
+        }
+    });
 };
 
 /**
@@ -13,20 +19,22 @@ exports.logout = (req, res, next) => {
  */
 exports.getMainPage = (req, res, next) => {
     const request = {
-        user_token: req.cookies.accessToken
+        sessionID: req.cookies.sessionID
     };
 
-    if(request.user_token){
-        console.log("/ (GET) : is user token");
-        Request.requestUserTokenValidation(request.user_token, (callback) => {
+    if(request.sessionID){
+        console.log("/ (GET) : is user session");
+        Request.verifyUserSession(request.sessionID, (callback) => {
             if(callback.result){
-                res.render('main', {id: callback.id, name: callback.name});
+                Request.getUserInfo(request.sessionID, (callback) => {
+                    res.render('main', {id: callback.id, name: callback.name});
+                });
             } else {
                 res.render('main');
             }
         });
     } else {
-        console.log("/ (GET) : is not user token, login redirect");
+        console.log("/ (GET) : is not user session, login redirect");
         res.render('main'); 
     }
 };

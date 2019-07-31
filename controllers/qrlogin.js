@@ -6,10 +6,11 @@ var Request = require('../services').Request;
 exports.getLoginPage = (req, res, next) => {
     console.log("/qrcode (GET) : create qrcode");
 
-    Request.requestQrcodeCreate((callback) => {
+    Request.createQrcode((callback) => {
         if(callback.result)
             res.render('login_qrcode', {qrcode: callback.qrcode});
         else
             res.render('login_qrcode'); 
     });
 };
+

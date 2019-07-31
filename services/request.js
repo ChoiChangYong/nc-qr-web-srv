@@ -1,13 +1,36 @@
 var request = require('request');
+var config = require('../config');
 
 /**
- * Auth Server로 유저 토큰 유효성 검증 요청
+ * Auth Server로 아이디 패스워드 검증 요청
  */
-exports.requestUserTokenValidation = (user_token, callback) => {
+exports.authenticationUser = (user, callback) => {
+    request.post({
+        headers: {'Accept': 'application/json'},
+        url: config.serverIP.authSrv+'/login',
+        body: user,
+        json: true
+    }, function(error, response, body){
+        console.log("=============body=============");
+        console.log(body);
+        console.log("==============================");
+    
+        if(body.result==1){
+            callback({result:true, sessionID:body.sessionID});
+        } else {
+            callback({result:false});
+        }
+    });
+};
+
+/**
+ * Auth Server로 유저 세션 검증 요청
+ */
+exports.verifyUserSession = (sessionID, callback) => {
     request.post({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.148.51:3000/user-token/validation',
-        body: {user_token},
+        url: config.serverIP.authSrv+'/session/verification',
+        body: {sessionID},
         json: true
       }, function(error, response, body){
         console.log(body);
@@ -20,34 +43,66 @@ exports.requestUserTokenValidation = (user_token, callback) => {
 };
 
 /**
- * Auth Server로 아이디 패스워드 검증 요청
+ * 유저 세션 검증 성공 시, Auth Server로 유저 정보 요청
  */
-exports.requestUserInfoVerification = (user, callback) => {
+exports.getUserInfo = (sessionID, callback) => {
+    request.get({
+        headers: {'content-type': 'application/json'},
+        url: config.serverIP.authSrv+'/users/'+sessionID,
+        json: true
+      }, function(error, response, body){
+        console.log(body);
+        if(body.result==0){
+            callback({result:false});
+        } else {
+            callback({result:true, id:body.id, name:body.name});
+        }
+    });
+};
+
+/**
+ * Auth Server로 세션 삭제 요청
+ */
+exports.deleteUserSession = (sessionID, callback) => {
+    request.delete({
+        headers: {'content-type': 'application/json'},
+        url: config.serverIP.authSrv+'/sessions/'+sessionID,
+        json: true
+      }, function(error, response, body){
+        console.log(body);
+        if(body.result==0){
+            callback({result:false});
+        } else {
+            callback({result:true});
+        }
+    });
+};
+
+/**
+ * Auth Server로 회원가입 처리 요청
+ */
+exports.addUser = (user, callback) => {
     request.post({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.148.51:3000/login',
+        url: config.serverIP.authSrv+'/join',
         body: user,
         json: true
     }, function(error, response, body){
-        console.log("=============body=============");
         console.log(body);
-        console.log("==============================");
-    
-        if(body.result==1){
-            callback({result:true, user_token:body.user_token, id:body.id, name:body.name});
-        } else {
-            callback({result:false});
-        }
+        if(body.result==0)
+            callback({result:false, message:body.message});
+        else
+            callback({result:true, message:body.message});
     });
 };
 
 /**
  * Auth Server로 QR코드 생성 요청
  */
-exports.requestQrcodeCreate = (callback) => {
+exports.createQrcode = (instanceId, callback) => {
     request.get({
         headers: {'content-type': 'application/json'},
-        url: 'http://172.19.148.51:3000/qrcode',
+        url: config.serverIP.authSrv+'/qrcode/'+instanceId,
         json: true
     }, function(error, response, body){
         console.log("=============body=============");
@@ -59,23 +114,5 @@ exports.requestQrcodeCreate = (callback) => {
         } else {
             callback({result:false});
         }
-    });
-};
-
-/**
- * Auth Server로 회원가입 처리 요청
- */
-exports.requestUserJoin = (user, callback) => {
-    request.post({
-        headers: {'content-type': 'application/json'},
-        url: 'http://172.19.148.51:3000/join',
-        body: user,
-        json: true
-    }, function(error, response, body){
-        console.log(body);
-        if(body.result==0)
-            callback({result:false, message:body.message});
-        else
-            callback({result:true, message:body.message});
     });
 };

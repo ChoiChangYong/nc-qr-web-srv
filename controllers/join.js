@@ -17,7 +17,7 @@ exports.processJoin = (req, res, next) => {
         'name': req.body.name
     };
 
-    Request.requestUserJoin(user, (callback) => {
+    Request.addUser(user, (callback) => {
         if(callback.result){
             res.redirect('/login');
         } else {
