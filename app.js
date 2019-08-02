@@ -25,19 +25,18 @@ socket_server.listen(3002, function() {
 });
 
 var instanceId;
-var qrSocket = io.on('connection', function (socket) {
+var qrSocket = io.on('connection', async function (socket) {
   console.log('socket connect');
 
   instanceId = socket.id;
-  
-  Request.createQrcode(instanceId, (callback) => {
-    if(callback.result){
-      qrSocket.to(instanceId).emit('qrcode', {
-        qrcode: callback.qrcode,
-        instanceId: instanceId
-      });
-    }
-  });
+ 
+  const createQrcodeResult = await Request.createQrcode(instanceId);
+  if(createQrcodeResult.result){
+    qrSocket.to(instanceId).emit('qrcode', {
+      qrcode: createQrcodeResult.qrcode,
+      instanceId: instanceId
+    });
+  }
 });
 
 // view engine setup
