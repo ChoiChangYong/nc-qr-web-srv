@@ -10,20 +10,16 @@ exports.getJoinPage = (req, res, next) => {
 /**
  * 회원가입 버튼 클릭, Auth Server로 처리 요청
  */
-exports.processJoin = (req, res, next) => {
+exports.processJoin = async (req, res, next) => {
     var user = {
         'id': req.body.id,
         'password': req.body.password,
         'name': req.body.name
     };
 
-    Request.addUser(user, (callback) => {
-        if(callback.result){
-            res.redirect('/login');
-        } else {
-            res.render('join', {
-                message: callback.message
-            });
-        }
-    });
+    const addUserResult = await Request.addUser(user);
+    if(!addUserResult.result)
+        return res.render('join', {message: addUserResult.message});
+
+    res.redirect('/login');
 };

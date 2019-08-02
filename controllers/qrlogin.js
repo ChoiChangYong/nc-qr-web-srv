@@ -3,14 +3,13 @@ var Request = require('../services').Request;
 /**
  * QR코드 로그인 페이지
  */
-exports.getLoginPage = (req, res, next) => {
+exports.getLoginPage = async (req, res, next) => {
     console.log("/qrcode (GET) : create qrcode");
 
-    Request.createQrcode((callback) => {
-        if(callback.result)
-            res.render('login_qrcode', {qrcode: callback.qrcode});
-        else
-            res.render('login_qrcode'); 
-    });
+    const createQrcodeResult = await Request.createQrcode();
+    if(createQrcodeResult.result)
+        res.render('login_qrcode', {qrcode: createQrcodeResult.qrcode});
+    else
+        res.render('login_qrcode'); 
 };
 
