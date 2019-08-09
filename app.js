@@ -29,15 +29,25 @@ var qrSocket = io.on('connection', async function (socket) {
   console.log('socket connect');
 
   instanceId = socket.id;
- 
+
   const createQrcodeResult = await Request.createQrcode(instanceId);
   if(createQrcodeResult.result){
     qrSocket.to(instanceId).emit('qrcode', {
-      qrcode: createQrcodeResult.qrcode,
-      instanceId: instanceId
+      qrcode: createQrcodeResult.qrcode
     });
   }
+
+  
 });
+// io.on('test', (msg) => {
+//   console.log(msg);
+
+//   for(var i=0; i<20; i++){
+//     io.emit('test', {
+//       message: '메시지 보낸드아아아아'
+//     });
+//   }
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
