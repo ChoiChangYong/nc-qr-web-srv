@@ -17,7 +17,6 @@ block content
 
       socket.on('qrcode', function (data) {
         console.log(data.qrcode);
-        console.log(data.instanceId);
         var qrcode = new QRCode(document.getElementById("qrcode"), {
           width : 250,
           height : 250,
@@ -31,14 +30,13 @@ block content
         setCookie('user-session', data.userSessionID, 60); // 1시간 후 만료
         window.location.href = '/';
       });
-      
+    
       window.onload = function () {
         setInterval(timer, 1000);
       };
 
       var countDown = 30;
-      function timer()
-      {
+      function timer(){
           if (countDown <= 0){
             $("#qrcode").remove();
             $("#qrcodeMessage").remove();
@@ -49,6 +47,15 @@ block content
           }
           countDown--;
       }
+
+      //- function socketTest(){
+      //-   console.log('소켓 고고!! Click!!')
+      //-   socket.emit('test', '메시지 보내줘!!');
+      //- }
+      //- socket.on('test', function (data) {
+      //-   console.log(data.message);
+      //- }); 
+
 
     #container.wrapper
       // (s) contents
@@ -76,6 +83,9 @@ block content
                 .btn-wrap
                   button.btn-login(type="button" onclick="location.href='/login'")
                     span 로그인 창으로 돌아가기
+                  //- br  
+                  //- button.btn-login(type="button" onclick="socketTest();")
+                  //-   span 소켓 고고!!
         #modal-ajax.modalPopup
           .modalCon
             // modal content

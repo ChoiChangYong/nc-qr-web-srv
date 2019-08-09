@@ -1,7 +1,7 @@
 var Request = require('../services').Request;
 
 /**
- * 로그아웃 처리, 쿠키삭제
+ * 로그아웃 처리, 세션삭제
  */
 exports.logout = async (req, res, next) => {
     const deleteUserSessionResult = await Request.deleteUserSession(req.cookies['user-session']);

@@ -47,7 +47,7 @@ exports.verifyUserSession = (sessionID) => {
 };
 
 /**
- * 유저 세션 검증 성공 시, Auth Server로 유저 정보 요청
+ *  Auth Server로 유저 세션 검증, 유저 정보 요청
  */
 exports.getUserInfo = (sessionID) => {
     return new Promise(resolve => { 
